@@ -1,4 +1,4 @@
-package com.example.demo.RootService;
+package com.example.demo.rootService;
 
 import com.example.demo.jsonObjects.Root;
 import com.fasterxml.jackson.databind.ObjectMapper;

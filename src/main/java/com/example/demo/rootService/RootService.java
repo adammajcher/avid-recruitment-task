@@ -1,4 +1,4 @@
-package com.example.demo.RootService;
+package com.example.demo.rootService;
 
 import com.example.demo.jsonObjects.Folder;
 import com.example.demo.jsonObjects.Result;

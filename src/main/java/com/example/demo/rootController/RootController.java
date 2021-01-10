@@ -1,6 +1,6 @@
-package com.example.demo.RootController;
+package com.example.demo.rootController;
 
-import com.example.demo.RootService.RootService;
+import com.example.demo.rootService.RootService;
 import com.example.demo.jsonObjects.Folder;
 import com.example.demo.jsonObjects.Result;
 import org.springframework.beans.factory.annotation.Autowired;
