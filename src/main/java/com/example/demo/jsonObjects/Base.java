@@ -2,7 +2,6 @@ package com.example.demo.jsonObjects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class Base {
     @JsonProperty("type")
     private String type;
