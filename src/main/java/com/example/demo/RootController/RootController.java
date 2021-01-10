@@ -3,6 +3,7 @@ package com.example.demo.RootController;
 import com.example.demo.RootService.RootService;
 import com.example.demo.jsonObjects.Folder;
 import com.example.demo.jsonObjects.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,8 @@ import java.util.Map;
 
 @RestController
 public class RootController {
-    
+
+    @Autowired
     private RootService rootService;
 
     @RequestMapping("/")
