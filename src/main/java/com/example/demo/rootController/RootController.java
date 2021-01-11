@@ -1,7 +1,7 @@
 package com.example.demo.rootController;
 
 import com.example.demo.jsonObjects.Folder;
-import com.example.demo.jsonObjects.Result;
+import com.example.demo.diffrentObjects.Result;
 import com.example.demo.rootService.RootService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +25,8 @@ public class RootController {
     }
 
     @RequestMapping("/{folderId}")
-    public ResponseEntity<Folder> getFolder(@PathVariable String folderId) {
-        return ResponseEntity.ok(rootService.getFolder(folderId));
+    public ResponseEntity<Folder> getFolder(@PathVariable String folderId, @RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit) {
+        return ResponseEntity.ok(rootService.getFolder(folderId, skip, limit));
     }
 }
 

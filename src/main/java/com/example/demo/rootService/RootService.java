@@ -1,11 +1,15 @@
 package com.example.demo.rootService;
 
+import com.example.demo.diffrentObjects.PaddingList;
+import com.example.demo.jsonObjects.Asset;
 import com.example.demo.jsonObjects.Folder;
-import com.example.demo.jsonObjects.Result;
+import com.example.demo.diffrentObjects.Result;
 import com.example.demo.jsonObjects.Root;
 import com.example.demo.resourceNotFoundException.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +45,8 @@ public class RootService {
             return resultsMap;
         } else {
             List<Result> results = resultsMap.get("results");
+            //PaddingList paddingList = getPaddingList(new PaddingList(results, null), skip, limit, "results");
+            //List<Result> resultsPaddingList = paddingList.getResults();
             List<Result> resultsPaddingList = new ArrayList<>();
             for (int i = 0; i < results.size(); i++) {
                 if (i >= skip && i <= results.size() - limit - 1) {
@@ -54,7 +60,7 @@ public class RootService {
 
     }
 
-    public Folder getFolder(String folderId) {
+    public Folder getFolder(String folderId, int skip, int limit) {
         List<Result> results = resultsMap.get("results");
 
         String folderPath = "";
@@ -63,20 +69,56 @@ public class RootService {
                 folderPath = result.getPath();
                 break;
             }
-//            try {
-//                if(URLEncoder.encode(result.getPath(), "UTF-8").equals(folderId)){
-//                    folderPath = result.getPath();
-//                    break;
-//                }
-//            } catch (Exception e){ System.out.println("bad encoding"); }
+            try {
+                String decodedFolderName = URLDecoder.decode(folderId, "UTF-8");
+                String resultName = result.getPath();
+                if(resultName.equals(decodedFolderName)){
+                    folderPath = result.getPath();
+                    break;
+                }
+            } catch (Exception e){ System.out.println("bad encoding"); }
         }
 
         if (folderPath.equals("")) {
             throw new ResourceNotFoundException("folder with provided ID not found");
         }
 
-        return root.getRootMap().get(folderPath);
+        if (skip == 0 && limit == 0) {
+            return root.getRootMap().get(folderPath);
+        } else {
+            Folder folder = root.getRootMap().get(folderPath);
+            List<Asset> assets = folder.getAssets();
+            //PaddingList paddingList = getPaddingList(new PaddingList(null, assets), skip, limit, "assets");
+            //List<Asset> resultsPaddingList = paddingList.getAssets();
+            List<Asset> assetsPaddingList = new ArrayList<>();
+            for (int i = 0; i < assets.size(); i++) {
+                if (i >= skip && i <= assets.size() - limit - 1) {
+                    assetsPaddingList.add(assets.get(i));
+                }
+            }
+            folder.setAssets(assetsPaddingList);
+            return folder;
+        }
     }
 
-
+//    private PaddingList getPaddingList(PaddingList paddingList, int skip, int limit, String flag){
+//        List<Object>  list = new ArrayList<Object>();
+//        if(flag.equals("assets")){
+//            List<Asset> assetsList = paddingList.getAssets();
+//            list = assetsList;
+//            List<Asset> newList = new ArrayList<>();
+//        } else if (flag.equals("results")){
+//           list = paddingList.getResults();
+//            List<Result> newList = new ArrayList<>();
+//        } else {
+//            return paddingList;
+//        }
+//
+//        for (int i = 0; i < list.size(); i++) {
+//            if (i >= skip && i <= list.size() - limit - 1) {
+//                paddingList.add(list.get(i));
+//            }
+//        }
+//        return paddingList;
+//    }
 }
