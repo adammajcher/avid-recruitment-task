@@ -20,13 +20,13 @@ public class RootController {
     private RootService rootService;
 
     @RequestMapping("")
-    public ResponseEntity<Map<String, List<Result>>> getResultsMap(@RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit) {
-        return ResponseEntity.ok(rootService.getResultsMap(skip, limit));
+    public ResponseEntity<Map<String, List<Result>>> getResultsMap(@RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit, @RequestParam(value = "query", defaultValue = "") String query) {
+        return ResponseEntity.ok(rootService.getResultsMap(skip, limit, query));
     }
 
     @RequestMapping("/{folderId}")
-    public ResponseEntity<Folder> getFolder(@PathVariable String folderId, @RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit) {
-        return ResponseEntity.ok(rootService.getFolder(folderId, skip, limit));
+    public ResponseEntity<Folder> getFolder(@PathVariable String folderId, @RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit, @RequestParam(value = "query", defaultValue = "") String query) {
+        return ResponseEntity.ok(rootService.getFolder(folderId, skip, limit, query));
     }
 }
 

@@ -1,19 +1,18 @@
 package com.example.demo.rootService;
 
-import com.example.demo.diffrentObjects.PaddingList;
+import com.example.demo.diffrentObjects.Result;
 import com.example.demo.jsonObjects.Asset;
 import com.example.demo.jsonObjects.Folder;
-import com.example.demo.diffrentObjects.Result;
 import com.example.demo.jsonObjects.Root;
 import com.example.demo.resourceNotFoundException.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class RootService {
@@ -40,27 +39,32 @@ public class RootService {
         }
     }
 
-    public Map<String, List<Result>> getResultsMap(int skip, int limit) {
+    public Map<String, List<Result>> getResultsMap(int skip, int limit, String query) {
+        List<Result> results = resultsMap.get("results");
+        Map<String, List<Result>> newMap = new HashMap<>();
+        if (!query.isEmpty()) {
+            results = results.stream().filter(folder -> folder.getPath().contains(query)).collect(Collectors.toList());
+        }
         if (skip == 0 && limit == 0) {
-            return resultsMap;
+            newMap.put("results", results);
+            return newMap;
         } else {
-            List<Result> results = resultsMap.get("results");
             //PaddingList paddingList = getPaddingList(new PaddingList(results, null), skip, limit, "results");
-            //List<Result> resultsPaddingList = paddingList.getResults();
-            List<Result> resultsPaddingList = new ArrayList<>();
+            //List<Result> resultsPaginationList = paddingList.getResults();
+            List<Result> resultsPaginationList = new ArrayList<>();
             for (int i = 0; i < results.size(); i++) {
                 if (i >= skip && i <= results.size() - limit - 1) {
-                    resultsPaddingList.add(results.get(i));
+                    resultsPaginationList.add(results.get(i));
                 }
             }
-            Map<String, List<Result>> newMap = new HashMap<>();
-            newMap.put("results", resultsPaddingList);
+            newMap.put("results", resultsPaginationList);
             return newMap;
         }
 
     }
 
-    public Folder getFolder(String folderId, int skip, int limit) {
+
+    public Folder getFolder(String folderId, int skip, int limit, String query) {
         List<Result> results = resultsMap.get("results");
 
         String folderPath = "";
@@ -72,31 +76,36 @@ public class RootService {
             try {
                 String decodedFolderName = URLDecoder.decode(folderId, "UTF-8");
                 String resultName = result.getPath();
-                if(resultName.equals(decodedFolderName)){
+                if (resultName.equals(decodedFolderName)) {
                     folderPath = result.getPath();
                     break;
                 }
-            } catch (Exception e){ System.out.println("bad encoding"); }
+            } catch (Exception e) {
+                System.out.println("bad encoding");
+            }
         }
 
         if (folderPath.equals("")) {
             throw new ResourceNotFoundException("folder with provided ID not found");
         }
 
+        Folder folder = root.getRootMap().get(folderPath);
+        List<Asset> assets = folder.getAssets();
+        if (!query.isEmpty()) {
+            assets = assets.stream().filter(asset -> asset.getBase().getType().contains(query)).collect(Collectors.toList());
+        }
         if (skip == 0 && limit == 0) {
-            return root.getRootMap().get(folderPath);
+            return folder;
         } else {
-            Folder folder = root.getRootMap().get(folderPath);
-            List<Asset> assets = folder.getAssets();
             //PaddingList paddingList = getPaddingList(new PaddingList(null, assets), skip, limit, "assets");
             //List<Asset> resultsPaddingList = paddingList.getAssets();
-            List<Asset> assetsPaddingList = new ArrayList<>();
+            List<Asset> assetsPaginationList = new ArrayList<>();
             for (int i = 0; i < assets.size(); i++) {
                 if (i >= skip && i <= assets.size() - limit - 1) {
-                    assetsPaddingList.add(assets.get(i));
+                    assetsPaginationList.add(assets.get(i));
                 }
             }
-            folder.setAssets(assetsPaddingList);
+            folder.setAssets(assetsPaginationList);
             return folder;
         }
     }
