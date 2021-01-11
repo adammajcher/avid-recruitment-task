@@ -20,23 +20,18 @@ public class RootService {
     private Root root;
     private Map<String, List<Result>> resultsMap = new HashMap<>();
 
-    public RootService() {
-        try {
-            root = RootCreator.createRoot();
-            Map<String, Folder> map = root.getRootMap();
+    public RootService() throws Exception {
+        root = RootCreator.createRoot();
+        Map<String, Folder> map = root.getRootMap();
 
-            List<Result> results = new ArrayList<>();
+        List<Result> results = new ArrayList<>();
 
-            for (Map.Entry<String, Folder> pair : map.entrySet()) {
-                Result result = new Result(pair.getValue().getId(), pair.getKey());
-                results.add(result);
-            }
-
-            resultsMap.put("results", results);
-
-        } catch (Exception e) {
-            System.out.println("Service couldn't load root (data.json file).");
+        for (Map.Entry<String, Folder> pair : map.entrySet()) {
+            Result result = new Result(pair.getValue().getId(), pair.getKey());
+            results.add(result);
         }
+
+        resultsMap.put("results", results);
     }
 
     public Map<String, List<Result>> getResultsMap(int skip, int limit, String query) {

@@ -1,4 +1,4 @@
-package com.example.demo.jsonObjects;
+package com.example.demo.diffrentObjects;
 
 public class Result {
     private String id;
