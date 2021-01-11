@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +21,14 @@ public class RootController {
     @Autowired
     private RootService rootService;
 
-    @RequestMapping("/")
-    public ResponseEntity<Map<String, List<Result>>> getResultsMap() {
-        return ResponseEntity.ok(rootService.getResultsMap());
+    @RequestMapping("")
+    public ResponseEntity<Map<String, List<Result>>> getResultsMap(@RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit) {
+        return ResponseEntity.ok(rootService.getResultsMap(skip, limit));
     }
 
     @RequestMapping("/{folderId}")
     public ResponseEntity<Folder> getFolder(@PathVariable String folderId) {
-        Folder folder = rootService.getFolder(folderId);
-        return ResponseEntity.ok(folder);
+        return ResponseEntity.ok(rootService.getFolder(folderId));
     }
 }
 

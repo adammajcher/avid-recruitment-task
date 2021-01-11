@@ -1,12 +1,11 @@
 package com.example.demo.rootService;
 
-import com.example.demo.resourceNotFoundException.ResourceNotFoundException;
 import com.example.demo.jsonObjects.Folder;
 import com.example.demo.jsonObjects.Result;
 import com.example.demo.jsonObjects.Root;
+import com.example.demo.resourceNotFoundException.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +36,22 @@ public class RootService {
         }
     }
 
-    public Map<String, List<Result>> getResultsMap() {
-        return resultsMap;
+    public Map<String, List<Result>> getResultsMap(int skip, int limit) {
+        if (skip == 0 && limit == 0) {
+            return resultsMap;
+        } else {
+            List<Result> results = resultsMap.get("results");
+            List<Result> resultsPaddingList = new ArrayList<>();
+            for (int i = 0; i < results.size(); i++) {
+                if (i >= skip && i <= results.size() - limit - 1) {
+                    resultsPaddingList.add(results.get(i));
+                }
+            }
+            Map<String, List<Result>> newMap = new HashMap<>();
+            newMap.put("results", resultsPaddingList);
+            return newMap;
+        }
+
     }
 
     public Folder getFolder(String folderId) {
