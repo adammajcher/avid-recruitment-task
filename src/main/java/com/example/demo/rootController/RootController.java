@@ -1,8 +1,8 @@
 package com.example.demo.rootController;
 
-import com.example.demo.rootService.RootService;
 import com.example.demo.jsonObjects.Folder;
 import com.example.demo.jsonObjects.Result;
+import com.example.demo.rootService.RootService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +27,6 @@ public class RootController {
     public ResponseEntity<Folder> getFolder(@PathVariable String folderId) {
         Folder folder = rootService.getFolder(folderId);
         return ResponseEntity.ok(folder);
-        //return ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }
 
