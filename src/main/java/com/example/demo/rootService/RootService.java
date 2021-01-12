@@ -17,16 +17,17 @@ import java.util.stream.Collectors;
 public class RootService {
 
     private Root root;
-    private List<FolderInfo> folderInfos = new ArrayList<>();
+    private List<FolderInfo> folderInfos;
 
     public RootService() throws Exception {
         root = RootCreator.createRoot();
         Map<String, Folder> map = root.getRootMap();
-
+        List<FolderInfo> folderInfoList = new ArrayList<>();
         for (Map.Entry<String, Folder> pair : map.entrySet()) {
             FolderInfo folderInfo = new FolderInfo(pair.getValue().getId(), pair.getKey());
-            folderInfos.add(folderInfo);
+            folderInfoList.add(folderInfo);
         }
+        folderInfos = folderInfoList;
     }
 
     public List<FolderInfo> getFolderInfos(int skip, int limit, String query) {
