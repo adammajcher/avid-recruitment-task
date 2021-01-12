@@ -65,7 +65,10 @@ public class RootService {
             try {
                 String decodedFolderName = URLDecoder.decode(folderId, "UTF-8");
                 String folderInfoPathName = folderInfo.getPath();
-                if (folderInfoPathName.equals(decodedFolderName)) {
+                String[] folderPathCuted = folderInfoPathName.substring(2).split("/");
+                String folderNameWithType = folderPathCuted[folderPathCuted.length -1];
+                String folderName = folderNameWithType.split("\\.")[0];
+                if (decodedFolderName.equals(folderInfoPathName) || decodedFolderName.equals(folderName)) {
                     folderPath = folderInfo.getPath();
                     break;
                 }
