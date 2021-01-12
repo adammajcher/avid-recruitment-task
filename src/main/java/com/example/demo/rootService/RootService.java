@@ -46,6 +46,8 @@ public class RootService {
                     } else {
                         if (folderInfoPaginationList.size() < limit) {
                             folderInfoPaginationList.add(folderInfos.get(i));
+                        } else {
+                            break;
                         }
                     }
                 }
@@ -63,12 +65,12 @@ public class RootService {
                 break;
             }
             try {
-                String decodedFolderName = URLDecoder.decode(folderId, "UTF-8");
+                String decodedFolderIdGiven = URLDecoder.decode(folderId, "UTF-8");
                 String folderInfoPathName = folderInfo.getPath();
                 String[] folderPathCuted = folderInfoPathName.substring(2).split("/");
                 String folderNameWithType = folderPathCuted[folderPathCuted.length -1];
                 String folderName = folderNameWithType.split("\\.")[0];
-                if (decodedFolderName.equals(folderInfoPathName) || decodedFolderName.equals(folderName)) {
+                if (decodedFolderIdGiven.equals(folderInfoPathName) || decodedFolderIdGiven.equals(folderName)) {
                     folderPath = folderInfo.getPath();
                     break;
                 }
