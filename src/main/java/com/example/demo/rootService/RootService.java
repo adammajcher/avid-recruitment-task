@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RootService {
@@ -68,7 +69,7 @@ public class RootService {
                 String decodedFolderIdGiven = URLDecoder.decode(folderId, "UTF-8");
                 String folderInfoPathName = folderInfo.getPath();
                 String[] folderPathCuted = folderInfoPathName.substring(2).split("/");
-                String folderNameWithType = folderPathCuted[folderPathCuted.length -1];
+                String folderNameWithType = folderPathCuted[folderPathCuted.length - 1];
                 String folderName = folderNameWithType.split("\\.")[0];
                 if (decodedFolderIdGiven.equals(folderInfoPathName) || decodedFolderIdGiven.equals(folderName)) {
                     folderPath = folderInfo.getPath();
@@ -86,9 +87,13 @@ public class RootService {
         Folder folderOriginal = root.getRootMap().get(folderPath);
         Folder folder = new Folder(folderOriginal);
         if (!query.isEmpty()) {
-            List<Asset> folderAssets = folder.getAssets();
-            folderAssets = folderAssets.stream().filter(asset -> asset.getBase().getType().contains(query)).collect(Collectors.toList());
-            folder.setAssets(folderAssets);
+            List<String> possibleArgumentsList = Stream.of("filemob", "masterclip", "subclip", "sequence", "group").collect(Collectors.toList());
+            if (possibleArgumentsList.contains(query)) {
+                List<Asset> folderAssets = folder.getAssets();
+                folderAssets = folderAssets.stream().filter(asset -> asset.getBase().getType().contains(query)).collect(Collectors.toList());
+                folder.setAssets(folderAssets);
+            }
+
         }
         if (skip == 0 && limit == 0) {
             return folder;
