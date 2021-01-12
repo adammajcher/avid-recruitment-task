@@ -1,10 +1,10 @@
-package com.example.demo.diffrentObjects;
+package com.example.demo.models;
 
-public class Result {
+public class FolderInfo {
     private String id;
     private String path;
 
-    public Result(String id, String path) {
+    public FolderInfo(String id, String path) {
         this.id = id;
         this.path = path;
     }

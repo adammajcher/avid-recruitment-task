@@ -1,27 +1,33 @@
 package com.example.demo.rootController;
 
-import com.example.demo.jsonObjects.Folder;
-import com.example.demo.diffrentObjects.Result;
+import com.example.demo.models.FolderInfo;
+import com.example.demo.models.data.Folder;
 import com.example.demo.rootService.RootService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class RootController {
 
-    @Autowired
     private RootService rootService;
 
+    public RootController(RootService rootService) {
+        this.rootService = rootService;
+    }
+
     @RequestMapping("")
-    public ResponseEntity<Map<String, List<Result>>> getResultsMap(@RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit, @RequestParam(value = "query", defaultValue = "") String query) {
-        return ResponseEntity.ok(rootService.getResultsMap(skip, limit, query));
+    public ResponseEntity<Map<String, List<FolderInfo>>> getResultsMap(@RequestParam(value = "skip", defaultValue = "0") int skip, @RequestParam(value = "limit", defaultValue = "0") int limit, @RequestParam(value = "query", defaultValue = "") String query) {
+        List<FolderInfo> folderInfoList = rootService.getFolderInfos(skip, limit, query);
+        Map<String, List<FolderInfo>> map = new HashMap<>();
+        map.put("results", folderInfoList);
+        return ResponseEntity.ok(map);
     }
 
     @RequestMapping("/{folderId}")

@@ -1,6 +1,6 @@
 package com.example.demo.rootService;
 
-import com.example.demo.jsonObjects.Root;
+import com.example.demo.models.data.Root;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class RootCreator {
 
-    private static String readLineByLineJava8(String filePath) {
+    private static String readLineByLine(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
 
         try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
@@ -25,7 +25,7 @@ public class RootCreator {
 
     public static Root createRoot() throws IOException {
         String fileName = "src/main/resources/json/data.json";
-        String json = readLineByLineJava8(fileName);
+        String json = readLineByLine(fileName);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
