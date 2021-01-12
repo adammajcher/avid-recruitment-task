@@ -17,10 +17,16 @@ public class Folder {
     public Folder() {
     }
 
+    public Folder(Folder folder) {
+        this.id = folder.getId();
+        this.assets = folder.getAssets();
+    }
+
     public Folder(String id, List<Asset> assets) {
         this.id = id;
         this.assets = assets;
     }
+
 
     public String getId() {
         return id;

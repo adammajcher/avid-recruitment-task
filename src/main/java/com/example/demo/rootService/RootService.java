@@ -52,7 +52,6 @@ public class RootService {
             }
             return folderInfoPaginationList;
         }
-
     }
 
 
@@ -79,15 +78,17 @@ public class RootService {
             throw new ResourceNotFoundException("folder with provided ID not found");
         }
 
-        Folder folder = root.getRootMap().get(folderPath);
-        List<Asset> folderAssets = folder.getAssets();
+        Folder folderOriginal = root.getRootMap().get(folderPath);
+        Folder folder = new Folder(folderOriginal);
         if (!query.isEmpty()) {
+            List<Asset> folderAssets = folder.getAssets();
             folderAssets = folderAssets.stream().filter(asset -> asset.getBase().getType().contains(query)).collect(Collectors.toList());
+            folder.setAssets(folderAssets);
         }
         if (skip == 0 && limit == 0) {
-            folder.setAssets(folderAssets);
             return folder;
         } else {
+            List<Asset> folderAssets = folder.getAssets();
             List<Asset> assetsPaginationList = new ArrayList<>();
             for (int i = 0; i < folderAssets.size(); i++) {
                 if (i >= skip) {
