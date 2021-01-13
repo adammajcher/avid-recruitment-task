@@ -21,3 +21,6 @@
   * query (filtering of folder content by file type in base->type)
   * skip (number of records to skip for pagination)
   * limit (maximum number of records to return) 
+### Additional features:
+* Dockerfile used for creation of docker container
+* CI(Continuous integration) with free gitHub action
